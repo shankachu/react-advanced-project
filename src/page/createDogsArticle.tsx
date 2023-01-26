@@ -35,7 +35,15 @@ function CreateDogArticle({ onSubmit } : NoteFormProps) {
                     <Col>
                         <Form.Group className="mb-3" controlId="tags">
                             <Form.Label>tags</Form.Label>
-                            <CreatableSelect isMulti />
+                            <CreatableSelect 
+                                isMulti
+                                value={selectedTags.map(tag => {
+                                    return { label: tag.label, value: tag.id }
+                                })}
+                                onChange={(newTags) => setSelectedTags(newTags.map(tag => {
+                                    return { label: tag.label, id: tag.value}
+                                }))}
+                            />
                         </Form.Group>
                     </Col>
                 </Row>

@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import CreateDogArticle from './page/createDogsArticle'
+import useLocalStorage from './LocalStorage'
 
 export type Note = {
   id: string
@@ -18,7 +19,21 @@ export type Tag = {
   label: string
 }
 
+// To handle the tag changes
+export type RawNote = {
+  id: string
+}
+
+export type RawNoteData = {
+  title: string
+  markdown: string
+  tagIds: string[]
+}
+
+
 function App() {
+  const [notes, setNotes] = useLocalStorage<RawNote[]>("NOTES", [])
+  const [tags, setTags] = useLocalStorage<Tag[]>("TAGS", [])
   return (
     <Container className='my-4'>
       <Routes>
