@@ -1,5 +1,6 @@
-import { Form, Stack, Row, Col, FormLabel } from "react-bootstrap"
-import CreatableReactSelect from 'react-select'
+import { Form, Stack, Row, Col, Button } from "react-bootstrap"
+import { Link } from 'react-router-dom'
+import CreatableSelect from 'react-select/creatable'
 
 function CreateDogArticle() {
     return (
@@ -15,11 +16,7 @@ function CreateDogArticle() {
                     <Col>
                         <Form.Group className="mb-3" controlId="tags">
                             <Form.Label>tags</Form.Label>
-                            <CreatableReactSelect
-                                isMulti
-                                menuIsOpen={false} 
-                                placeholder="Type a dog type..."
-                            />
+                            <CreatableSelect isMulti />
                         </Form.Group>
                     </Col>
                 </Row>
@@ -27,6 +24,13 @@ function CreateDogArticle() {
                             <Form.Label>Body</Form.Label>
                             <Form.Control required as="textarea" rows={15} />
                 </Form.Group>
+                <Stack direction="horizontal" gap={2} className="justify-content-end">
+                    <Button type="submit" variant="primary">Save</Button>
+                    <Link to="..">
+                        <Button type="button" variant="outline-secondary">Cancel</Button>
+                    </Link>
+                    
+                </Stack>
             </Stack>
         </Form>
     )
