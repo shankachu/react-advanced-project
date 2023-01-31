@@ -46,10 +46,13 @@ function App() {
 
   // handle create note
   function onCreateNote({ tags, ...data }: NoteData){
+    console.log('button clicked', tags)
+    console.log('button clicked', data)
+    
     setNotes(prevNotes => {
       return [
         ...prevNotes, 
-        { ...data, id: uuidV4(), tagsIds: tags.map(tag => tag.id) }
+        { ...data, id: uuidV4(), tagIds: tags.map(tag => tag.id) }
       ]
     })
   }
