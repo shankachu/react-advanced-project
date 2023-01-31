@@ -46,8 +46,8 @@ function App() {
 
   // handle create note
   function onCreateNote({ tags, ...data }: NoteData){
-    console.log('button clicked', tags)
-    console.log('button clicked', data)
+    console.log('tag selected', tags)
+    console.log('note created', data)
     
     setNotes(prevNotes => {
       return [
@@ -65,7 +65,7 @@ function App() {
   return (
     <Container className='my-4'>
       <Routes>
-        <Route path='/' element={<NoteList notes={notes} availableTags={tags}/>} />
+        <Route path='/' element={<NoteList notes={notesWithTags} availableTags={tags}/>} />
         <Route path='/new' element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTags={tags} />} />
         <Route path='/:id'> 
           <Route index element={<h1>Show</h1>} />
