@@ -1,5 +1,7 @@
 import { useNote } from "./NoteLayout";
-import { Form, Stack, Row, Col, Badge } from "react-bootstrap"
+import { Stack, Row, Col, Badge, Button } from "react-bootstrap"
+import { Link } from 'react-router-dom'
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 export function Note() {
     const note = useNote()
@@ -16,6 +18,18 @@ export function Note() {
                      </Stack>
                 )}
             </Col>
+            <Col xs="auto">
+                <Stack gap={2} direction="horizontal" >
+                    <Link to={`/${note.id}/edit`}>
+                        <Button variant="primary">Edit</Button>
+                    </Link>
+                    <Button variant="outline-danger">Delete</Button>
+                    <Link to="..">
+                        <Button variant="outline-secondary">Back</Button>
+                    </Link>
+                </Stack>
+             </Col>
         </Row>
+        <ReactMarkdown>{note.markdown}</ReactMarkdown>
     </>
 }
