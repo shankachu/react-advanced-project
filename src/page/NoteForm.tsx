@@ -1,6 +1,6 @@
 import { FormEvent, useRef, useState } from "react"
 import { Form, Stack, Row, Col, Button } from "react-bootstrap"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import CreatableSelect from 'react-select/creatable'
 import { NoteData, Tag } from "../App"
 import { v4 as uuidV4 } from 'uuid'
@@ -9,22 +9,24 @@ type NoteFormProps = {
     onSubmit: (data: NoteData) => void,
     onAddTag: (tags: Tag) => void,
     availableTags: Tag[]
-}
+} & NoteData
 
-export function NoteForm({ onSubmit, onAddTag, availableTags } : NoteFormProps) {
+export function NoteForm({ onSubmit, onAddTag, availableTags, title = '', markdown= '', tags=[] } : NoteFormProps) {
     const titleRef = useRef<HTMLInputElement>(null)
     const markdownRef = useRef<HTMLTextAreaElement>(null)
     const [selectedTags, setSelectedTags] = useState<Tag[]>([])
-    const handleSubmit = (e: FormEvent) => {
+    const navigate = useNavigate()
+
+    function handleSubmit (e: FormEvent){
         e.preventDefault()
 
-        console.log(titleRef.current)
-        console.log(markdownRef.current)
         onSubmit({
             title: titleRef.current!.value,
             markdown: markdownRef.current!.value,
-            tags: []
+            tags: selectedTags,
         })
+
+        navigate("..")
     }
 
     return (
@@ -34,7 +36,7 @@ export function NoteForm({ onSubmit, onAddTag, availableTags } : NoteFormProps) 
                     <Col>
                         <Form.Group className="mb-3" controlId="title">
                             <Form.Label>Title</Form.Label>
-                            <Form.Control required ref={titleRef} />
+                            <Form.Control required ref={titleRef} defaultValue={title} />
                         </Form.Group>
                     </Col>
                     <Col>
