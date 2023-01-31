@@ -3,18 +3,23 @@ import { Form, Stack, Row, Col, Button } from "react-bootstrap"
 import { Link } from 'react-router-dom'
 import CreatableSelect from 'react-select/creatable'
 import { NoteData, Tag } from "../App"
+import { v4 as uuidV4 } from 'uuid'
 
 type NoteFormProps = {
-    onSubmit: (data: NoteData) => void
+    onSubmit: (data: NoteData) => void,
+    onAddTag: (tags: Tag) => void,
+    availableTags: Tag[]
 }
 
-function CreateDogArticle({ onSubmit } : NoteFormProps) {
+export function NoteForm({ onSubmit, onAddTag, availableTags } : NoteFormProps) {
     const titleRef = useRef<HTMLInputElement>(null)
     const markdownRef = useRef<HTMLTextAreaElement>(null)
     const [selectedTags, setSelectedTags] = useState<Tag[]>([])
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault()
 
+        console.log(titleRef.current)
+        console.log(markdownRef.current)
         onSubmit({
             title: titleRef.current!.value,
             markdown: markdownRef.current!.value,
@@ -36,6 +41,14 @@ function CreateDogArticle({ onSubmit } : NoteFormProps) {
                         <Form.Group className="mb-3" controlId="tags">
                             <Form.Label>tags</Form.Label>
                             <CreatableSelect 
+                                onCreateOption={label => {
+                                    const newTag = { id: uuidV4(), label }
+                                    onAddTag(newTag)
+                                    setSelectedTags(prev => [...prev, newTag])
+                                }}
+                                options={availableTags.map(tag => {
+                                    return { label: tag.label, value: tag.id }
+                                })}
                                 isMulti
                                 value={selectedTags.map(tag => {
                                     return { label: tag.label, value: tag.id }
@@ -63,4 +76,4 @@ function CreateDogArticle({ onSubmit } : NoteFormProps) {
     )
 }
 
-export default CreateDogArticle
+export default NoteForm

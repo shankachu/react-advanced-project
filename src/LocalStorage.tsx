@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
+// we check the type of the function
 function useLocalStorage<T>(key: string, initialValue: T | (() => T)){
     const [value, setValue] = useState<T>(() => {
         const jsonValue = localStorage.getItem(key)
@@ -13,6 +14,11 @@ function useLocalStorage<T>(key: string, initialValue: T | (() => T)){
             return JSON.parse(jsonValue)
         }
     })
+
+    // everytime we change it, we update it
+    useEffect(() => {
+        localStorage.setItem(key, JSON.stringify(value))
+    }, [value, key])
 
     return [value, setValue] as [T, typeof setValue]
 }
