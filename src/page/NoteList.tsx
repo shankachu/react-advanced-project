@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react"
-import { Form, Stack, Row, Col, Button, Card, Badge } from "react-bootstrap"
+import { Form, Stack, Row, Col, Button, Card, Badge, Modal } from "react-bootstrap"
 import { Link, useNavigate } from 'react-router-dom'
 import ReactSelect from "react-select"
 import { Tag } from "../App"
@@ -16,9 +16,16 @@ type NoteListPropos = {
     notes: SimplifiedNote[]
 }
 
+type EditTagsModalProps = {
+    show: boolean,
+    availableTags: Tag[],
+    handleClose: () => void
+}
+
 export function NoteList ({ availableTags, notes }: NoteListPropos){
     const [selectedTags, setSelectedTags] = useState<Tag[]>([])
     const [title, setTitle] = useState('')
+    const [editTagModalIsOpen, setEditTagModalIsOpen] = useState(false)
     
     // filter displayed notes by the title
     const filteredNotes = useMemo(() => {
@@ -36,7 +43,7 @@ export function NoteList ({ availableTags, notes }: NoteListPropos){
                 <Link to="/new">
                     <Button variant="primary">Create</Button>
                 </Link>
-                <Button variant="outline-secondary">Edit Tags</Button>
+                <Button variant="outline-secondary" onClick={() => setEditTagModalIsOpen(true)}>Edit Tags</Button>
             </Stack>
         </Col>
         <Form>
@@ -75,6 +82,7 @@ export function NoteList ({ availableTags, notes }: NoteListPropos){
             ))}
         </Row>
     </Row>
+    <EditTagsModal availableTags={availableTags} show={editTagModalIsOpen} handleClose={() => setEditTagModalIsOpen(false)} />
     </>
 }
 
@@ -94,4 +102,28 @@ function NoteCard({ id, title, tags }: SimplifiedNote){
         </Card.Body>
     </Card>
 
+}
+
+function EditTagsModal({ availableTags, handleClose, show }: EditTagsModalProps) {
+    return <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+            <Modal.Title>Edit Tags</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <Form>
+                <Stack gap={2}>
+                    {availableTags.map(tag => (
+                        <Row key={tag.id}>
+                            <Col>
+                                <Form.Control type="text" value={tag.label} />
+                            </Col>
+                            <Col xs="auto">
+                                <Button variant="outline-danger">&times;</Button>
+                            </Col>
+                        </Row>
+                    ))}
+                </Stack>
+            </Form>
+        </Modal.Body>
+    </Modal>
 }
